@@ -2,7 +2,7 @@ package ch01;
 
 /**
  * 本章简要介绍Java语言的发展历史
- * 
+ * 本章知识点为观点信息。
  * @author niuzhihuan
  */
 public class Java程序设计概述 {
@@ -39,10 +39,8 @@ public class Java程序设计概述 {
 	 * 
 	 */
 	public void Java发展简史() {
-
 	}
 
 	public void 关于Java的常见误解() {
-
 	}
 }
