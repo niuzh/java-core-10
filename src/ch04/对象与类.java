@@ -43,7 +43,7 @@ public class 对象与类 {
 	public void 静态域与静态方法() {
 	}
 	/**
-	 * 
+	 * 按值调用，按引用调用，Java程序设计语言采用按值调用。
 	 */
 	public void 方法参数() {
 	}
