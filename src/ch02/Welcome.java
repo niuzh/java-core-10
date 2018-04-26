@@ -25,6 +25,8 @@ public class Welcome {
 
 		}
 		System.out.println();
+		//\_u表示转义 Java™
+		System.out.println("Java\u2122");
 	}
 
 }
