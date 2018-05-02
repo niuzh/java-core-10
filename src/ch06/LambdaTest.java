@@ -21,11 +21,14 @@ public class LambdaTest
       Arrays.sort(planets);
       System.out.println(Arrays.toString(planets));
       System.out.println("Sorted by length:");
-      Arrays.sort(planets, (first, second) -> first.length() - second.length());
+      Arrays.sort(planets, (first, second) -> {return first.length() - second.length();});
       System.out.println(Arrays.toString(planets));
             
       Timer t = new Timer(1000, event ->
-         System.out.println("The time is " + new Date()));
+         	{
+        	 System.out.println("The time is " + new Date());
+        	 }
+         );
       t.start();   
          
       // keep program running until user selects "Ok"
