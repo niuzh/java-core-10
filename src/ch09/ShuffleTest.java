@@ -7,7 +7,6 @@ import java.util.List;
 public class ShuffleTest {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		List<Integer> numbewrs=new ArrayList<>();
 		for (int i = 0; i <=49; i++) {
 			numbewrs.add(i);

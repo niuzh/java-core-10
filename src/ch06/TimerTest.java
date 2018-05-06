@@ -18,7 +18,6 @@ public class TimerTest {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		ActionListener listener=new TimePrinter();
 		Timer timer=new Timer(10000, listener);
 		timer.start();
@@ -31,7 +30,6 @@ class TimePrinter implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
 		System.out.println("at the tone, the time is "+new Date());
 		Toolkit.getDefaultToolkit().beep();
 	}

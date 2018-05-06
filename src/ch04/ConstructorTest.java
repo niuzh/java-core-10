@@ -51,7 +51,6 @@ class EmployeeC{
 		this("Employee #"+nextId, s);
 	}
 	public EmployeeC() {
-		// TODO Auto-generated constructor stub
 	}
 	
 	/**
