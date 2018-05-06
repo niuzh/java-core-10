@@ -1,4 +1,4 @@
-package slider;
+package ch12.slider;
 
 import java.awt.*;
 import java.util.*;

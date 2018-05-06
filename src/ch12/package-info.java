@@ -18,7 +18,10 @@
  * 	滚动窗格(JScrollPanel)
  * 选择组件
  * 	复选框(JCheckBox)
- * 	单选纽()
+ * 	单选纽(ButtonGroup、JRadioButton)
+ * 	边框
+ * 	组合框(JComboBox)
+ * 	滑动条(JSlider)
  * 菜单
  * 复杂的布局管理
  * 对话框

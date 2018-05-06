@@ -1,4 +1,4 @@
-package border;
+package ch12.border;
 
 import java.awt.*;
 import javax.swing.*;
