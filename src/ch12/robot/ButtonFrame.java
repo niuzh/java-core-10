@@ -1,4 +1,4 @@
-package robot;
+package ch12.robot;
 
 import java.awt.*;
 import java.awt.event.*;

@@ -1,4 +1,4 @@
-package fileChooser;
+package ch12.fileChooser;
 
 import java.awt.*;
 import java.io.*;

@@ -23,9 +23,29 @@
  * 	组合框(JComboBox)
  * 	滑动条(JSlider)
  * 菜单
+ * 	创建菜单(JMenuBar,JMenu,JMenuItem)
+ * 	菜单项中的图标
+ * 	复选框和单选按钮菜单(JCheckBoxHenuItem RadioButtonMenuItem)
+ * 	弹出菜单(JPopupMenu)
+ * 	快捷键和加速器：可以同时按下 ALT 键和菜单的快捷键来实现在菜单栏中选择一个顶层菜单的操作 。
+ * 	启用和禁用菜单项
+ * 	工具栏(JToolBar)
+ * 	工具提示
  * 复杂的布局管理
- * 对话框
+ * 	网格组布局：GridBagLayout，
+ * 	组布局
+ * 	不使用布局管理器
+ * 	定制布局管理器
+ * 	遍历顺序：遍历顺序很直观, 它的顺序是从左至右 , 从上至下 。
+ * 对话框：介绍了对话框和与对话框交流数据
+ * 	选项对话框(JOptionPane)
+ * 	创建对话框
+ * 	数据交换
+ * 	文件对话框(JFileChooser)
+ * 	颜色选择器(JColorChooser)
  * GUI程序排错
+ * 	调试技巧
+ * 	让AWT机器人完成工作：Robot 类可以向任何 AWT 程序发送按键和鼠标点击事件 。
  * @author niuzhihuan
  */
 package ch12;

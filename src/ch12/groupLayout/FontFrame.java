@@ -1,4 +1,4 @@
-package groupLayout;
+package ch12.groupLayout;
 
 import java.awt.Font;
 import java.awt.event.ActionListener;

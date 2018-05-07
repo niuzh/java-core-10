@@ -1,4 +1,4 @@
-package fileChooser;
+package ch12.fileChooser;
 
 import java.io.*;
 import javax.swing.*;

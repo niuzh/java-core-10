@@ -1,4 +1,4 @@
-package calculator;
+package ch12.calculator;
 
 import javax.swing.*;
 

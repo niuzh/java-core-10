@@ -1,4 +1,4 @@
-package toolBar;
+package ch12.toolBar;
 
 import java.awt.*;
 import javax.swing.*;

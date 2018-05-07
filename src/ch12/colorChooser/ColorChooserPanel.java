@@ -1,4 +1,4 @@
-package colorChooser;
+package ch12.colorChooser;
 
 import java.awt.Color;
 import java.awt.Frame;

@@ -1,4 +1,4 @@
-package gridbag;
+package ch12.gridbag;
 
 import java.awt.Font;
 import java.awt.GridBagLayout;

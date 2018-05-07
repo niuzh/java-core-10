@@ -1,4 +1,4 @@
-package dataExchange;
+package ch12.dataExchange;
 
 /**
  * A user has a name and password. For security reasons, the password is stored as a char[], not a

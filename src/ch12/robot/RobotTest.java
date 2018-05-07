@@ -1,4 +1,4 @@
-package robot;
+package ch12.robot;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -24,7 +24,7 @@ public class RobotTest
             });
       
       // attach a robot to the screen device
-
+ 
       GraphicsEnvironment environment = GraphicsEnvironment.getLocalGraphicsEnvironment();
       GraphicsDevice screen = environment.getDefaultScreenDevice();
 

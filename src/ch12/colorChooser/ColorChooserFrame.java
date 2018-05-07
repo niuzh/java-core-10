@@ -1,4 +1,4 @@
-package colorChooser;
+package ch12.colorChooser;
 
 import javax.swing.*;
 

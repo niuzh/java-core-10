@@ -1,4 +1,4 @@
-package dialog;
+package ch12.dialog;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;

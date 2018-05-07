@@ -1,4 +1,4 @@
-package circleLayout;
+package ch12.circleLayout;
 
 import java.awt.*;
 import javax.swing.*;

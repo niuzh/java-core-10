@@ -1,4 +1,4 @@
-package eventTracer;
+package ch12.eventTracer;
 
 import java.awt.*;
 
