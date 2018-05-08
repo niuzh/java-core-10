@@ -1,4 +1,4 @@
-package forkJoin;
+package ch14.forkJoin;
 
 import java.util.concurrent.*;
 import java.util.function.*;

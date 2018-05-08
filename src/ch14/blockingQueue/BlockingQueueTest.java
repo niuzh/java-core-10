@@ -1,4 +1,4 @@
-package blockingQueue;
+package ch14.blockingQueue;
 
 import java.io.*;
 import java.util.*;
@@ -23,7 +23,7 @@ public class BlockingQueueTest
          String directory = in.nextLine();
          System.out.print("Enter keyword (e.g. volatile): ");
          String keyword = in.nextLine();
-          
+         //一个生产者
          Runnable enumerator = () -> {
             try
             {
@@ -36,6 +36,7 @@ public class BlockingQueueTest
          };
          
          new Thread(enumerator).start();
+         //多个消费者
          for (int i = 1; i <= SEARCH_THREADS; i++) {
             Runnable searcher = () -> {
                try

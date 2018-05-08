@@ -1,4 +1,4 @@
-package synch;
+package ch14.synch;
 
 /**
  * This program shows how multiple threads can safely access a data structure.
@@ -24,7 +24,8 @@ public class SynchBankTest
                while (true)
                {
                   int toAccount = (int) (bank.size() * Math.random());
-                  double amount = MAX_AMOUNT * Math.random();
+                  double amount = MAX_AMOUNT * Math.random()+MAX_AMOUNT;
+//                  double amount = MAX_AMOUNT * Math.random();//+MAX_AMOUNT;
                   bank.transfer(fromAccount, toAccount, amount);
                   Thread.sleep((int) (DELAY * Math.random()));
                }

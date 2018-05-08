@@ -1,4 +1,4 @@
-package synch2;
+package ch14.synch2;
 
 import java.util.*;
 
@@ -30,8 +30,10 @@ public class Bank
     */
    public synchronized void transfer(int from, int to, double amount) throws InterruptedException
    {
-      while (accounts[from] < amount)
-         wait();
+      while (accounts[from] < amount){
+    	  System.out.println("当前线程{"+from+"}阻塞，释放锁");
+         wait(1000);
+      }
       System.out.print(Thread.currentThread());
       accounts[from] -= amount;
       System.out.printf(" %10.2f from %d to %d", amount, from, to);
