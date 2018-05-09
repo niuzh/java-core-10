@@ -1,4 +1,4 @@
-package swing;
+package ch14.swing;
 
 import java.awt.*;
 import java.util.*;
@@ -93,6 +93,7 @@ class BadWorkerRunnable implements Runnable
 }
 
 /**
+ * 在事件分配线程中执行run方法
  * This runnable modifies a combo box by randomly adding and removing numbers.
  * In order to ensure that the combo box is not corrupted, the editing
  * operations are forwarded to the event dispatch thread.
