@@ -37,7 +37,8 @@ public class EbookDown {
 		Files.deleteIfExists(Paths.get(filePath));
 		for (Map.Entry<String, String> entry : map.entrySet()) {
 			System.out.println(entry.getKey() + ":" + entry.getValue());
-			Files.write(Paths.get(filePath), (entry.getKey() + "\n").getBytes(Charset.forName("utf-8")), StandardOpenOption.APPEND, StandardOpenOption.CREATE);
+			Files.write(Paths.get(filePath), (entry.getKey() + "\n").getBytes(Charset.forName("utf-8")),
+					StandardOpenOption.APPEND, StandardOpenOption.CREATE);
 			BufferedReader chapter = getBufferedReaderByURL(strURL + entry.getValue());
 			List<String> lines = new ArrayList<>();
 			while ((line = chapter.readLine()) != null) {
@@ -45,14 +46,16 @@ public class EbookDown {
 				if (line.startsWith("&nbsp;&nbsp;&nbsp;&nbsp;")) {
 					line.replace("**泡!书。吧*", "").replace("泡*书*吧(）", "");
 					line = "   " + line.replace("&nbsp;", "").replace("<br />", "").replace("林风", "林雷") + "\n";
-					Files.write(Paths.get(filePath), line.getBytes(Charset.forName("utf-8")), StandardOpenOption.APPEND, StandardOpenOption.CREATE);
+					Files.write(Paths.get(filePath), line.getBytes(Charset.forName("utf-8")), StandardOpenOption.APPEND,
+							StandardOpenOption.CREATE);
 				}
 			}
 
 		}
 	}
 
-	private static BufferedReader getBufferedReaderByURL(String strURL) throws MalformedURLException, IOException, UnsupportedEncodingException {
+	private static BufferedReader getBufferedReaderByURL(String strURL)
+			throws MalformedURLException, IOException, UnsupportedEncodingException {
 		URL url = new URL(strURL);// 创建连接
 		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 		BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), "GB2312"));
