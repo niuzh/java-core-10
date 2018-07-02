@@ -43,6 +43,8 @@ public class EbookDown {
 			List<String> lines = new ArrayList<>();
 			while ((line = chapter.readLine()) != null) {
 				line = line.trim();
+				if (line.toLowerCase().startsWith("ps:"))
+					continue;
 				if (line.startsWith("&nbsp;&nbsp;&nbsp;&nbsp;")) {
 					line.replace("**泡!书。吧*", "").replace("泡*书*吧(）", "");
 					line = "   " + line.replace("&nbsp;", "").replace("<br />", "").replace("林风", "林雷") + "\n";
