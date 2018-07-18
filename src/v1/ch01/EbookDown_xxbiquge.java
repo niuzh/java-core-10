@@ -1,0 +1,102 @@
+package v1.ch01;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.OpenOption;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.util.*;
+
+public class EbookDown_xxbiquge {
+
+	public static void main(String[] args) throws Exception {
+		String strURL = "https://www.xxbiquge.com/77_77291/";
+		String contentTitle = "";
+		Map<String, String> map = new LinkedHashMap<>();
+		BufferedReader reader = getBufferedReaderByURL(strURL);
+		String line = "";
+		while ((line = reader.readLine()) != null) {
+			line = line.trim();
+			if (line.startsWith("<meta property=\"og:title\" content=")) {
+				contentTitle = line.substring(line.indexOf("content=") + 9, line.length() - 3);
+				System.out.println(contentTitle);
+			}
+			if (line.startsWith("<div id=\"list\">")) {
+				line = reader.readLine();
+				line = reader.readLine();
+				line = reader.readLine();
+				line = line.trim().replace("<dd><a href=\"", "").replace("</a></dd>", "#").replace("\">", "")
+						.replace("\" class=\"empty", "");
+				// /71_71407/3741441.html">第1章 哥发达了!/71_71407/3741442.html">第2章
+				// 贤良淑德的未婚妻/71_71407/3741443.html">
+				String[] chapter = line.split("#");
+				for (int i = 0; i < chapter.length; i++) {
+					String url = chapter[i].split(".html")[0] + ".html";
+					// /71_71407/3741441.html
+					String title=chapter[i].split(".html")[1];
+					if(!title.startsWith("第")){
+						title="第"+title;
+					}
+					if(!title.contains("章")&&title.indexOf(" ")>0){
+						title=title.substring(0,title.indexOf(" "))+"章"+title.substring(title.indexOf(" "));
+					}
+					map.put(title, url.substring(url.lastIndexOf("/")));
+				}
+			}
+		}
+		String filePath = "/home/niu/Documents/" + contentTitle + ".txt";
+		Files.deleteIfExists(Paths.get(filePath));
+
+		for (Map.Entry<String, String> entry : map.entrySet()) {
+			System.out.println(entry.getKey() + ":" + entry.getValue());
+			if (entry.getKey().contains("第") && entry.getKey().contains("章")) {
+				String title = entry.getKey();
+				if (title.contains("（") && title.contains("）")) {
+					title = title.substring(0, title.indexOf("（"));
+				}
+				Files.write(Paths.get(filePath), ("\n" + title + "\n").getBytes(Charset.forName("utf-8")),
+						StandardOpenOption.APPEND, StandardOpenOption.CREATE);
+				BufferedReader chapter = getBufferedReaderByURL(strURL + entry.getValue());
+				System.out.println(strURL + entry.getValue() + ":");
+
+				while ((line = chapter.readLine()) != null) {
+					line = line.trim();
+					if (line.contains("div") && line.contains("content")
+							&& line.contains("&nbsp;&nbsp;&nbsp;&nbsp;")) {
+						line = line.replace("<div id=\"content\">", "").replace("</div>", "")
+								.replace("<br /><br />", "tab").replace("&nbsp;", "").replace("<br />", "tab");
+						String[] strs = line.split("tab");
+						for (String string : strs) {
+							if (string.trim().toLowerCase().contains("ps"))
+								continue;
+							if (string.trim().toLowerCase().equals(";"))
+								continue;
+							if (string.trim().toLowerCase().equals("……")
+									|| string.trim().toLowerCase().equals("......"))
+								continue;
+							string = "     " + string + "\n";
+							Files.write(Paths.get(filePath), string.getBytes(Charset.forName("utf-8")),
+									StandardOpenOption.APPEND, StandardOpenOption.CREATE);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	private static BufferedReader getBufferedReaderByURL(String strURL)
+			throws MalformedURLException, IOException, UnsupportedEncodingException {
+		URL url = new URL(strURL);// 创建连接
+		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+		BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8"));
+		return reader;
+	}
+
+}
