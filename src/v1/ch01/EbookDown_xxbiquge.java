@@ -1,6 +1,7 @@
 package v1.ch01;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
@@ -9,7 +10,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
-import java.nio.file.OpenOption;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.*;
@@ -17,7 +17,10 @@ import java.util.*;
 public class EbookDown_xxbiquge {
 
 	public static void main(String[] args) throws Exception {
-		String strURL = "https://www.xxbiquge.com/77_77291/";
+		String strURL = "https://www.xxbiquge.com/13_13979/";
+		if(args.length>1){
+			strURL=args[0];
+		}
 		String contentTitle = "";
 		Map<String, String> map = new LinkedHashMap<>();
 		BufferedReader reader = getBufferedReaderByURL(strURL);
@@ -52,6 +55,9 @@ public class EbookDown_xxbiquge {
 			}
 		}
 		String filePath = "/home/niu/Documents/" + contentTitle + ".txt";
+		if(args.length>1){
+			filePath = args[1]+File.separator + contentTitle + ".txt";
+		}
 		Files.deleteIfExists(Paths.get(filePath));
 
 		for (Map.Entry<String, String> entry : map.entrySet()) {
@@ -76,12 +82,20 @@ public class EbookDown_xxbiquge {
 						for (String string : strs) {
 							if (string.trim().toLowerCase().contains("ps"))
 								continue;
+							if (string.trim().toLowerCase().contains("感谢")&&(string.contains("月票")||string.contains("评价票")||string.contains("打赏")))
+								continue;
+							if (string.trim().toLowerCase().contains("推荐票"))
+								continue;
 							if (string.trim().toLowerCase().equals(";"))
 								continue;
 							if (string.trim().toLowerCase().equals("……")
 									|| string.trim().toLowerCase().equals("......"))
 								continue;
 							string = "     " + string + "\n";
+							if(string.toLowerCase().contains("xshuotxt")){
+					            int index=string.toLowerCase().indexOf("xshuotxt");
+					            string=string.substring(0,index-4)+string.substring(index+12);
+					        }
 							Files.write(Paths.get(filePath), string.getBytes(Charset.forName("utf-8")),
 									StandardOpenOption.APPEND, StandardOpenOption.CREATE);
 						}
