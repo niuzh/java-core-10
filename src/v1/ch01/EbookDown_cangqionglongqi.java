@@ -15,7 +15,8 @@ import java.nio.file.StandardOpenOption;
 import java.util.*;
 
 public class EbookDown_cangqionglongqi {
-
+		private static String charsetName="gbk";
+		private static String toCharsetName="gbk";
 		public static void main(String[] args) throws Exception {
 			String strURL = "https://www.cangqionglongqi.com/longxiaodaming/";
 			String contentTitle = "";
@@ -40,7 +41,7 @@ public class EbookDown_cangqionglongqi {
 			Files.deleteIfExists(Paths.get(filePath));
 			for (Map.Entry<String, String> entry : map.entrySet()) {
 				System.out.println(entry.getKey() + ":" + entry.getValue());
-				Files.write(Paths.get(filePath), (entry.getKey() + "\n").getBytes(Charset.forName("utf-8")),
+				Files.write(Paths.get(filePath), (entry.getKey() + "\n").getBytes(Charset.forName(toCharsetName)),
 						StandardOpenOption.APPEND, StandardOpenOption.CREATE);
 				BufferedReader chapter = getBufferedReaderByURL(strURL + entry.getValue());
 				List<String> lines = new ArrayList<>();
@@ -51,8 +52,9 @@ public class EbookDown_cangqionglongqi {
 						line=line.replace("&nbsp;", "").replace("<br /><br />", "<br />");
 						String[] linens=line.split("<br />");
 						for(String s:linens){
+							if(s.contains("分割线"))continue;
 							s = "   " + s +"\r\n";
-							Files.write(Paths.get(filePath), s.getBytes(Charset.forName("utf-8")), StandardOpenOption.APPEND,
+							Files.write(Paths.get(filePath), s.getBytes(Charset.forName(toCharsetName)), StandardOpenOption.APPEND,
 								StandardOpenOption.CREATE);
 						}
 					}
@@ -65,7 +67,7 @@ public class EbookDown_cangqionglongqi {
 				throws MalformedURLException, IOException, UnsupportedEncodingException {
 			URL url = new URL(strURL);// 创建连接
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-			BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), "GB2312"));
+			BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(),charsetName));
 			return reader;
 	}
 }
