@@ -1,67 +1,103 @@
 package v1.ch01;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
+import java.nio.charset.UnsupportedCharsetException;
 import java.nio.file.Files;
-import java.nio.file.OpenOption;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.*;
 
 public class EbookDown {
-
-	public static void main(String[] args) throws Exception {
-		String strURL = "https://www.88dus.com/xiaoshuo/43/43070/";
-		String contentTitle = "";
-		Map<String, String> map = new LinkedHashMap<>();
-		BufferedReader reader = getBufferedReaderByURL(strURL);
-		String line = "";
-		while ((line = reader.readLine()) != null) {
-			line = line.trim();
-			if (line.startsWith("<meta property=\"og:title\" content=")) {
-				contentTitle = line.substring(line.indexOf("content=") + 9, line.length() - 2);
-				System.out.println(contentTitle);
-			}
-			if (line.startsWith("<li><a href") && line.contains(".html")) {
-				line = line.replace("<li><a href=\"", "").replace("</a></li>", "");
-				map.put(line.split("\">")[1], line.split("\">")[0]);
-			}
-		}
-		String filePath = "/home/niu/Documents/" + contentTitle + ".txt";
-		Files.deleteIfExists(Paths.get(filePath));
-		for (Map.Entry<String, String> entry : map.entrySet()) {
-			System.out.println(entry.getKey() + ":" + entry.getValue());
-			Files.write(Paths.get(filePath), (entry.getKey() + "\n").getBytes(Charset.forName("utf-8")),
-					StandardOpenOption.APPEND, StandardOpenOption.CREATE);
-			BufferedReader chapter = getBufferedReaderByURL(strURL + entry.getValue());
-			List<String> lines = new ArrayList<>();
-			while ((line = chapter.readLine()) != null) {
-				line = line.trim();
-				if (line.toLowerCase().startsWith("ps:"))
-					continue;
-				if (line.startsWith("&nbsp;&nbsp;&nbsp;&nbsp;")) {
-					line.replace("**泡!书。吧*", "").replace("泡*书*吧(）", "");
-					line = "   " + line.replace("&nbsp;", "").replace("<br />", "").replace("林风", "林雷") + "\n";
-					Files.write(Paths.get(filePath), line.getBytes(Charset.forName("utf-8")), StandardOpenOption.APPEND,
-							StandardOpenOption.CREATE);
-				}
-			}
-
-		}
+	protected static String charset_gbk="gbk";
+	
+	protected static List<String> getReplaceList(){
+		List<String> strings=new ArrayList<>();
+		strings.add("&amp;nbp;&amp;nbp;&amp;nbp;&amp;nbp;");
+		strings.add("|每两个看言情的人当中，就有一个注册过°°小°说°网的账号。");
+		strings.add("woshifengeshuhao woshifengeshuhaowoshifengeshuhaowoshifengeshuhao");
+		strings.add("r1292");
+		strings.add("（..）");
+		strings.add("以下网站比书库更新的快“target=“_nk“rel=“nofollo/a&amp;gt;||||||");
+		strings.add("!!（..）");
+		strings.add("|||||||");
+		strings.add("&lt;hr&gt;");
+		strings.add("手机同步阅读请访问");
+		strings.add("，()，");
+		strings.add("最快更新无错阅读，请访问请收藏本站阅读最新!&lt;/p&amp;gt;");
+		strings.add("， !");
+		strings.add("&nbsp;");
+		strings.add("<br />");
+		strings.add("泡*书*吧(）");
+		strings.add("**泡!书。吧*");
+		strings.add("神速记住【燃文书库】，给书友提供一个舒适靠谱的无弹窗小说阅读网。");
+		return strings;
 	}
-
-	private static BufferedReader getBufferedReaderByURL(String strURL)
+	protected static BufferedReader getBufferedReaderByURL(String strURL)
 			throws MalformedURLException, IOException, UnsupportedEncodingException {
 		URL url = new URL(strURL);// 创建连接
 		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-		BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), "GB2312"));
+		BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), charset_gbk));
 		return reader;
 	}
 
+	/**
+	 * 以指定编码方式读取文件，返回文件内容
+	 *
+	 * @param file
+	 *            要转换的文件
+	 * @param fromCharsetName
+	 *            源文件的编码
+	 * @return
+	 * @throws Exception
+	 */
+	public static String getFileContentFromCharset(File file,
+			String fromCharsetName) throws Exception {
+		if (!Charset.isSupported(fromCharsetName)) {
+			throw new UnsupportedCharsetException(fromCharsetName);
+		}
+		InputStream inputStream = new FileInputStream(file);
+		InputStreamReader reader = new InputStreamReader(inputStream,
+				fromCharsetName);
+		char[] chs = new char[(int) file.length()];
+		reader.read(chs);
+		String str = new String(chs).trim();
+		reader.close();
+		return str;
+	}
+ 
+	/**
+	 * 以指定编码方式写文本文件，存在会覆盖
+	 * 
+	 * @param file
+	 *            要写入的文件
+	 * @param toCharsetName
+	 *            要转换的编码
+	 * @param content
+	 *            文件内容
+	 * @throws Exception
+	 */
+	public static void saveFile2Charset(File file, String toCharsetName,
+			String content) throws Exception {
+		if (!Charset.isSupported(toCharsetName)) {
+			throw new UnsupportedCharsetException(toCharsetName);
+		}
+		OutputStream outputStream = new FileOutputStream(file);
+		OutputStreamWriter outWrite = new OutputStreamWriter(outputStream,
+				toCharsetName);
+		outWrite.write(content);
+		outWrite.close();
+	}
 }
