@@ -20,30 +20,47 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.*;
 
+import com.sun.org.apache.bcel.internal.generic.NEW;
+
 public class EbookDown {
 	protected static String charset_gbk="gbk";
-	
-	protected static List<String> getReplaceList(){
-		List<String> strings=new ArrayList<>();
-		strings.add("&amp;nbp;&amp;nbp;&amp;nbp;&amp;nbp;");
-		strings.add("|每两个看言情的人当中，就有一个注册过°°小°说°网的账号。");
-		strings.add("woshifengeshuhao woshifengeshuhaowoshifengeshuhaowoshifengeshuhao");
-		strings.add("r1292");
-		strings.add("（..）");
-		strings.add("以下网站比书库更新的快“target=“_nk“rel=“nofollo/a&amp;gt;||||||");
-		strings.add("!!（..）");
-		strings.add("|||||||");
-		strings.add("&lt;hr&gt;");
-		strings.add("手机同步阅读请访问");
-		strings.add("，()，");
-		strings.add("最快更新无错阅读，请访问请收藏本站阅读最新!&lt;/p&amp;gt;");
-		strings.add("， !");
-		strings.add("&nbsp;");
-		strings.add("<br />");
-		strings.add("泡*书*吧(）");
-		strings.add("**泡!书。吧*");
-		strings.add("神速记住【燃文书库】，给书友提供一个舒适靠谱的无弹窗小说阅读网。");
-		return strings;
+	private static List<String> replaceStrList=new ArrayList<>();
+	static{
+		replaceStrList.add("</div>");
+		replaceStrList.add("abc小说网不跳字。");
+		replaceStrList.add("3w.");
+		replaceStrList.add("abcxs");
+		replaceStrList.add("abc小说网");
+		replaceStrList.add("起点中文网欢迎广大书友光临阅读，最新、最快、最火的连载作品尽在起点原创！");
+		replaceStrList.add("&amp;nbp;&amp;nbp;&amp;nbp;&amp;nbp;");
+		replaceStrList.add("|每两个看言情的人当中，就有一个注册过°°小°说°网的账号。");
+		replaceStrList.add("woshifengeshuhao woshifengeshuhaowoshifengeshuhaowoshifengeshuhao");
+		replaceStrList.add("r1292");
+		replaceStrList.add("netbsp;");
+		replaceStrList.add("（..）");
+		replaceStrList.add("以下网站比书库更新的快“target=“_nk“rel=“nofollo/a&amp;gt;||||||");
+		replaceStrList.add("!!（..）");
+		replaceStrList.add("|||||||");
+		replaceStrList.add("&lt;hr&gt;");
+		replaceStrList.add("手机同步阅读请访问");
+		replaceStrList.add("，()，");
+		replaceStrList.add("最快更新无错阅读，请访问请收藏本站阅读最新!&lt;/p&amp;gt;");
+		replaceStrList.add("， !");
+		replaceStrList.add("&nbsp;");
+		replaceStrList.add("<br />");
+		replaceStrList.add("wwㄟw．．”");
+		replaceStrList.add("wwんw．．");
+		replaceStrList.add("泡*书*吧(）");
+		replaceStrList.add("**泡!书。吧*");
+		replaceStrList.add("ΔeΔ小说");
+		replaceStrList.add("神速记住【燃文书库】，给书友提供一个舒适靠谱的无弹窗小说阅读网。");
+		
+	}
+	protected static String replaceStr(String stringRow){
+		for (String string : replaceStrList) {
+			stringRow=stringRow.replace(string, "");
+		}
+		return stringRow;
 	}
 	protected static BufferedReader getBufferedReaderByURL(String strURL)
 			throws MalformedURLException, IOException, UnsupportedEncodingException {
@@ -51,6 +68,28 @@ public class EbookDown {
 		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 		BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), charset_gbk));
 		return reader;
+	}
+	
+	protected static boolean containsSkip(String str) {
+		if(str.trim().length()==0)return true;
+		List<String> list=new ArrayList<>();
+		list.add("求收藏");
+		list.add("起点读书");
+		list.add("会员手打");
+		for (String string : list) {
+			if(str.trim().contains(string))return true;
+		}
+		return false;
+	}
+	protected static boolean startsWithSkip(String str) {
+		List<String> list=new ArrayList<>();
+		list.add("ps");
+		list.add("感谢大家一直以来的支持");
+		list.add("...");
+		for (String string : list) {
+			if(str.trim().startsWith(string))return true;
+		}
+		return false;
 	}
 
 	/**

@@ -22,7 +22,7 @@ import java.util.*;
 
 public class EbookDown81 extends EbookDown{
 	public static void main(String[] args) throws Exception {
-		String strURL = "https://www.81zw.us/book/8698/";
+		String strURL = "https://www.81zw.us/book/3442/";
 		String contentTitle = "";
 		Map<String, String> map = new LinkedHashMap<>();
 		BufferedReader reader = getBufferedReaderByURL(strURL);
@@ -51,9 +51,11 @@ public class EbookDown81 extends EbookDown{
 				if (line.startsWith("<div id=\"content\">")) {
 					String lineContent=line.replace("<div id=\"content\">","");
 					for (String stringRow : lineContent.split("<br /><br />")) {
-						for (String string : getReplaceList()) {
-							stringRow=stringRow.replace(string, "");
-						}
+						stringRow=stringRow.trim();
+						stringRow=replaceStr(stringRow);
+						if(startsWithSkip(stringRow))continue;
+						if(containsSkip(stringRow))continue;
+						if(stringRow.startsWith(entry.getKey()))continue;
 						stringRow = "   "+stringRow+ "\n";
 						Files.write(Paths.get(filePath), stringRow.getBytes(Charset.forName(charset_gbk)), StandardOpenOption.APPEND,
 								StandardOpenOption.CREATE);
