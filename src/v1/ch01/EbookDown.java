@@ -15,16 +15,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.UnsupportedCharsetException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.util.*;
-
-import com.sun.org.apache.bcel.internal.generic.NEW;
 
 public class EbookDown {
 	protected static String charset_gbk="gbk";
-	private static List<String> replaceStrList=new ArrayList<>();
+	protected static List<String> replaceStrList=new ArrayList<>();
 	static{
 		replaceStrList.add("</div>");
 		replaceStrList.add("abc小说网不跳字。");
@@ -48,13 +43,23 @@ public class EbookDown {
 		replaceStrList.add("， !");
 		replaceStrList.add("&nbsp;");
 		replaceStrList.add("<br />");
-		replaceStrList.add("wwㄟw．．”");
-		replaceStrList.add("wwんw．．");
+		replaceStrList.add("ㄟ");
+		replaceStrList.add("ん");
+		replaceStrList.add("www．．”");
 		replaceStrList.add("泡*书*吧(）");
 		replaceStrList.add("**泡!书。吧*");
 		replaceStrList.add("ΔeΔ小说");
 		replaceStrList.add("神速记住【燃文书库】，给书友提供一个舒适靠谱的无弹窗小说阅读网。");
-		
+		replaceStrList.add("感谢正版订阅！");
+		replaceStrList.add("miaobigé，");
+		replaceStrList.add("é8..");
+		replaceStrList.add("cmiaonetbsp;");
+		replaceStrList.add("8妙.");
+		replaceStrList.add("笔8阁8，o");
+		replaceStrList.add("…");
+		replaceStrList.add("阁2，");
+		replaceStrList.add("é，");
+		replaceStrList.add("cmiao");
 	}
 	protected static String replaceStr(String stringRow){
 		for (String string : replaceStrList) {
@@ -86,6 +91,7 @@ public class EbookDown {
 		list.add("ps");
 		list.add("感谢大家一直以来的支持");
 		list.add("...");
+		list.add("注：");
 		for (String string : list) {
 			if(str.trim().startsWith(string))return true;
 		}

@@ -2,27 +2,25 @@ package v1.ch01;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.nio.charset.Charset;
-import java.nio.charset.UnsupportedCharsetException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.*;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Set;
 
 public class EbookDown81 extends EbookDown{
+	
+	static{
+		replaceStrList.add("本章完");
+		replaceStrList.add("#8226;");
+		replaceStrList.add("最快更新，阅读请。");
+		replaceStrList.add("readx;");
+	}
 	public static void main(String[] args) throws Exception {
-		String strURL = "https://www.81zw.us/book/3442/";
+		String strURL = "https://www.81zw.us/book/5084";
 		String contentTitle = "";
 		Map<String, String> map = new LinkedHashMap<>();
 		BufferedReader reader = getBufferedReaderByURL(strURL);
@@ -41,7 +39,9 @@ public class EbookDown81 extends EbookDown{
 		String filePath = "/home/niu/Documents/" + contentTitle + ".txt";
 		Files.deleteIfExists(Paths.get(filePath));
 		strURL=strURL.substring(0,strURL.indexOf("book"));
+		Set<String> lineSet=new HashSet<>();
 		for (Map.Entry<String, String> entry : map.entrySet()) {
+			lineSet.clear();
 			System.out.println(entry.getKey() + ":" + entry.getValue());
 			Files.write(Paths.get(filePath), (entry.getKey() + "\n").getBytes(Charset.forName(charset_gbk)),
 					StandardOpenOption.APPEND, StandardOpenOption.CREATE);
@@ -57,10 +57,11 @@ public class EbookDown81 extends EbookDown{
 						if(containsSkip(stringRow))continue;
 						if(stringRow.startsWith(entry.getKey()))continue;
 						stringRow = "   "+stringRow+ "\n";
-						Files.write(Paths.get(filePath), stringRow.getBytes(Charset.forName(charset_gbk)), StandardOpenOption.APPEND,
+						if(lineSet.add(stringRow)){
+							Files.write(Paths.get(filePath), stringRow.getBytes(Charset.forName(charset_gbk)), StandardOpenOption.APPEND,
 								StandardOpenOption.CREATE);
+						}
 					}
-					
 				}
 			}
 		}
