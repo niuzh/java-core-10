@@ -1,24 +1,16 @@
 package v1.ch01;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
-public class EbookDown_cangqionglongqi {
-		private static String charsetName="gbk";
-		private static String toCharsetName="gbk";
+public class EbookDown_cangqionglongqi extends EbookDown{
 		public static void main(String[] args) throws Exception {
-			String strURL = "https://www.cangqionglongqi.com/longxiaodaming/";
+			String strURL = "https://www.cangqionglongqi.com/diguozuoqi/";
 			String contentTitle = "";
 			Map<String, String> map = new LinkedHashMap<>();
 			BufferedReader reader = getBufferedReaderByURL(strURL);
@@ -37,14 +29,13 @@ public class EbookDown_cangqionglongqi {
 					map.put(line.split("\">")[1], line.split("\">")[0]);
 				}
 			}
-			String filePath = "C:/Users/niu/Documents/" + contentTitle + ".txt";
+			String filePath =getfilePath(contentTitle);// "C:/Users/niu/Documents/" + contentTitle + ".txt";
 			Files.deleteIfExists(Paths.get(filePath));
 			for (Map.Entry<String, String> entry : map.entrySet()) {
 				System.out.println(entry.getKey() + ":" + entry.getValue());
-				Files.write(Paths.get(filePath), (entry.getKey() + "\n").getBytes(Charset.forName(toCharsetName)),
+				Files.write(Paths.get(filePath), (entry.getKey() + "\n").getBytes(Charset.forName(charset_gbk)),
 						StandardOpenOption.APPEND, StandardOpenOption.CREATE);
 				BufferedReader chapter = getBufferedReaderByURL(strURL + entry.getValue());
-				List<String> lines = new ArrayList<>();
 				while ((line = chapter.readLine()) != null) {
 					line = line.trim();
 					if (line.startsWith("<div id=\"content\">")) {
@@ -54,20 +45,12 @@ public class EbookDown_cangqionglongqi {
 						for(String s:linens){
 							if(s.contains("分割线"))continue;
 							s = "   " + s +"\r\n";
-							Files.write(Paths.get(filePath), s.getBytes(Charset.forName(toCharsetName)), StandardOpenOption.APPEND,
+							Files.write(Paths.get(filePath), s.getBytes(Charset.forName(charset_gbk)), StandardOpenOption.APPEND,
 								StandardOpenOption.CREATE);
 						}
 					}
 				}
-
 			}
+			saveFileOfUtf8(contentTitle, filePath);
 		}
-
-		private static BufferedReader getBufferedReaderByURL(String strURL)
-				throws MalformedURLException, IOException, UnsupportedEncodingException {
-			URL url = new URL(strURL);// 创建连接
-			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-			BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(),charsetName));
-			return reader;
-	}
 }

@@ -15,9 +15,14 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.UnsupportedCharsetException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 
 public class EbookDown {
+	protected static String getfilePath(String contentTitle){
+		return "/home/niu/Documents/" + contentTitle + ".txt";
+	}
 	protected static String charset_gbk="gbk";
 	protected static List<String> replaceStrList=new ArrayList<>();
 	static{
@@ -97,7 +102,13 @@ public class EbookDown {
 		}
 		return false;
 	}
-
+	protected static void saveFileOfUtf8(String contentTitle, String filePath) throws IOException, Exception {
+		String targetPath=filePath.replace(contentTitle,contentTitle+"-utf8");
+		Files.deleteIfExists(Paths.get(targetPath));
+		String fileContent=getFileContentFromCharset(new File(filePath), charset_gbk);
+		saveFile2Charset(new File(targetPath), "utf-8", fileContent);
+		Files.deleteIfExists(Paths.get(filePath));
+	}
 	/**
 	 * 以指定编码方式读取文件，返回文件内容
 	 *

@@ -2,6 +2,7 @@ package v1.ch01;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -65,10 +66,7 @@ public class EbookDown81 extends EbookDown{
 				}
 			}
 		}
-		String targetPath=filePath.replace(contentTitle,contentTitle+"-utf8");
-		Files.deleteIfExists(Paths.get(targetPath));
-		String fileContent=getFileContentFromCharset(new File(filePath), charset_gbk);
-		saveFile2Charset(new File(targetPath), "utf-8", fileContent);
-		Files.deleteIfExists(Paths.get(filePath));
+		saveFileOfUtf8(contentTitle, filePath);
 	}
+	
 }
