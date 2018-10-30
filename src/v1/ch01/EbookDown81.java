@@ -21,7 +21,7 @@ public class EbookDown81 extends EbookDown{
 		replaceStrList.add("readx;");
 	}
 	public static void main(String[] args) throws Exception {
-		String strURL = "https://www.81zw.us/book/5084";
+		String strURL = "https://www.81zw.us/book/1365/";
 		String contentTitle = "";
 		Map<String, String> map = new LinkedHashMap<>();
 		BufferedReader reader = getBufferedReaderByURL(strURL);

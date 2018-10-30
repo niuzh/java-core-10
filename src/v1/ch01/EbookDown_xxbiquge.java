@@ -17,7 +17,7 @@ import java.util.*;
 public class EbookDown_xxbiquge {
 
 	public static void main(String[] args) throws Exception {
-		String strURL = "https://www.xxbiquge.com/1_1397/";
+		String strURL = "https://www.xbiquge6.com/77_77466/";
 		if(args.length>1){
 			strURL=args[0];
 		}
