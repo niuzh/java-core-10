@@ -14,10 +14,10 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.*;
 
-public class EbookDown_xxbiquge {
+public class EbookDown_biqugexsw {
 
 	public static void main(String[] args) throws Exception {
-		String strURL = "https://www.xbiquge6.com/79_79645/";
+		String strURL = "https://www.biqugexsw.com/68_68791/";
 		if(args.length>1){
 			strURL=args[0];
 		}
@@ -35,27 +35,19 @@ public class EbookDown_xxbiquge {
 			if(line.startsWith("<meta property=\"og:description\" content=")){
 				contentDesc = line.substring(line.indexOf("content=") + 9, line.length() - 3);
 			}
-			if (line.startsWith("<div id=\"list\">")) {
-				line = reader.readLine();
-				line = reader.readLine();
-				line = reader.readLine();
-				line = line.trim().replace("<dd><a href=\"", "").replace("</a></dd>", "#").replace("\">", "")
-						.replace("\" class=\"empty", "");
-				// /71_71407/3741441.html">第1章 哥发达了!/71_71407/3741442.html">第2章
-				// 贤良淑德的未婚妻/71_71407/3741443.html">
+			//<dd><a href ="/68_68791/11696750.html">第一章 宇宙时空位面破灭者</a></dd>
+			if (line.startsWith("<dd><a href")) {
+				line = line.trim().replace("<dd><a href =\"", "").replace("</a></dd>", "").replace("\">", "#");
 				String[] chapter = line.split("#");
-				for (int i = 0; i < chapter.length; i++) {
-					String url = chapter[i].split(".html")[0] + ".html";
-					// /71_71407/3741441.html
-					String title=chapter[i].split(".html")[1];
-					if(!title.startsWith("第")){
-						title="第"+title;
-					}
-					if(!title.contains("章")&&title.indexOf(" ")>0){
-						title=title.substring(0,title.indexOf(" "))+"章"+title.substring(title.indexOf(" "));
-					}
-					map.put(title, url.substring(url.lastIndexOf("/")));
+				String url = chapter[0];
+				String title=chapter[1];
+				if(!title.startsWith("第")){
+					title="第"+title;
 				}
+				if(!title.contains("章")&&title.indexOf(" ")>0){
+					title=title.substring(0,title.indexOf(" "))+"章"+title.substring(title.indexOf(" "));
+				}
+				map.put(title, url.substring(url.lastIndexOf("/")));
 			}
 		}
 		String filePath = "/home/niu/Documents/" + contentTitle + ".txt";
@@ -76,14 +68,24 @@ public class EbookDown_xxbiquge {
 				}
 				Files.write(Paths.get(filePath), ("\n" + title + "\n").getBytes(Charset.forName("utf-8")),
 						StandardOpenOption.APPEND, StandardOpenOption.CREATE);
-				BufferedReader chapter = getBufferedReaderByURL(strURL + entry.getValue());
+				BufferedReader chapter=null;
+				try {
+					Thread.sleep(3000);
+					chapter = getBufferedReaderByURL(strURL + entry.getValue());
+				} catch (IOException e) {
+					Thread.sleep(5000);
+					chapter = getBufferedReaderByURL(strURL + entry.getValue());
+				}				
 				System.out.println(strURL + entry.getValue() + ":");
-
+				boolean isStart=false;
 				while ((line = chapter.readLine()) != null) {
 					line = line.trim();
-					if (line.contains("div") && line.contains("content")
-							&& line.contains("&nbsp;&nbsp;&nbsp;&nbsp;")) {
-						line = line.replace("<div id=\"content\">", "").replace("</div>", "")
+					if(isStart&&line.contains("</div>")){
+						isStart=false;
+					}
+					if (isStart||(line.contains("div") && line.contains("content")&& line.contains("showtxt"))) {
+						isStart=true;
+						line = line.replace("<div id=\"content\" class=\"showtxt\">", "").replace("</div>", "")
 								.replace("<br /><br />", "tab").replace("&nbsp;", "").replace("<br />", "tab");
 						String[] strs = line.split("tab");
 						for (String string : strs) {
@@ -102,6 +104,8 @@ public class EbookDown_xxbiquge {
 							if (string.trim().toLowerCase().equals("……")
 									|| string.trim().toLowerCase().equals("......"))
 								continue;
+							if (string.trim().toLowerCase().contains("www.biqugexsw.com"))
+								continue;
 							for (String str : getReplaceStrings()) {
 								string=string.replace(str, "");
 							}
@@ -112,7 +116,6 @@ public class EbookDown_xxbiquge {
 									strLast=string.substring(last);
 								}
 								string=string.substring(0,string.toLowerCase().indexOf("www"))+strLast;
-								
 							}
 							string = "     " + string + "\n";
 							if(string.toLowerCase().contains("xshuotxt")){
@@ -132,7 +135,7 @@ public class EbookDown_xxbiquge {
 			throws MalformedURLException, IOException, UnsupportedEncodingException {
 		URL url = new URL(strURL);// 创建连接
 		HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-		BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), "utf-8"));
+		BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), "gbk"));
 		return reader;
 	}
 	private static List<String> getReplaceStrings() {

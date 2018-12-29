@@ -14,10 +14,10 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.*;
 
-public class EbookDown_xxbiquge {
+public class EbookDown_biqugex {
 
 	public static void main(String[] args) throws Exception {
-		String strURL = "https://www.xbiquge6.com/79_79645/";
+		String strURL = "https://www.xbiquge6.com/78_78867/";
 		if(args.length>1){
 			strURL=args[0];
 		}
